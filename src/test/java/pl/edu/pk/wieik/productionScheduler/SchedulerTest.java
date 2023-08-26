@@ -11,8 +11,8 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 
 class SchedulerTest {
-    private Scheduler scheduler = new Scheduler();
-    private ScheduledTaskMapper scheduledTaskMapper = new ScheduledTaskMapper();
+    private final Scheduler scheduler = new Scheduler();
+    private final ScheduledTaskMapper scheduledTaskMapper = new ScheduledTaskMapper();
 
     @Test
     void schedule() {
@@ -57,7 +57,7 @@ class SchedulerTest {
                 .build();
 
 
-        List<ScheduledTask> result = scheduler.schedule(List.of(task1, task2, task3, task4, task5));
+        List<ScheduledTask> result = scheduler.schedule(List.of(task1, task2, task3, task4, task5), 4);
 
         System.out.println(scheduledTaskMapper.mapToScheduledTasksForTimeUnit(result));
 

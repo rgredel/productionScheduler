@@ -22,12 +22,9 @@ public class ProductionProcess {
     private Long id;
     private String name;
     @OneToMany(mappedBy = "productionProcess")
-    @ToString.Exclude
     private List<Parameter> parameters;
     @OneToMany(mappedBy = "productionProcess")
-    @ToString.Exclude
     private List<ProductionProcessTask> productionProcessTasks;
     @OneToMany(mappedBy = "productionProcess")
-    @ToString.Exclude
     private List<Schedule> schedules;
 }

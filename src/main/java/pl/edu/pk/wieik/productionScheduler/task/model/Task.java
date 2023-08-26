@@ -1,5 +1,6 @@
 package pl.edu.pk.wieik.productionScheduler.task.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,8 +22,8 @@ public class Task{
     private String description;
     @OneToMany(mappedBy = "task")
     @ToString.Exclude
+    @JsonIgnore
     private List<ProductionProcessTask> productionProcessTasks;
-
 
 }
 

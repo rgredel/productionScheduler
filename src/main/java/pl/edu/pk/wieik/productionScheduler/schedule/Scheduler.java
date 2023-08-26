@@ -16,23 +16,22 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @RequiredArgsConstructor
 @Service
 public class Scheduler {
-    public List<ScheduledTask> schedule(List<ScheduleTask> allTasks){
+    public List<ScheduledTask> schedule(List<ScheduleTask> allTasks, int availableProcessors){
         List<ScheduleTask> scheduledTasks = new ArrayList<>();
-        int availableProcessors = 4;
         List<ScheduledTask> schedule = new LinkedList<>();
 
         List<ScheduleTask> dependentTasks = new ArrayList<>();
-        int currentTimeUnit = 0; //1
+        int currentTimeUnit = 0;
 
         for (ScheduleTask task : allTasks) {
-            calculatePriority(task); //2
-            calculateCriticalTaskTime(task, dependentTasks); //3
-            calculateNumberOfDependencies(task); //4
+            calculatePriority(task);
+            calculateCriticalTaskTime(task, dependentTasks);
+            calculateNumberOfDependencies(task);
         }
 
         if(!isEmpty(dependentTasks)){
             for (ScheduleTask task : allTasks) {
-                recalculatePriorityForDependentTasks(task); //6
+                recalculatePriorityForDependentTasks(task);
             }
         }
 
@@ -68,10 +67,10 @@ public class Scheduler {
 
     private ScheduleTaskResult scheduleReadyTask(List<ScheduleTask> readyTasks, int availableProcessors, int allProcessors, int timeUnits, List<ScheduledTask> schedule, int currentTimeUnit) {
 
-        int maxPriority = maxPriority(readyTasks); //M
+        int maxPriority = maxPriority(readyTasks);
         List<ScheduleTask> tasksWithMaxPriority = findAllTasksWithGivenPriority(readyTasks, maxPriority);
 
-        int maxRequiredProcessors = maxRequiredProcessors(tasksWithMaxPriority); //F
+        int maxRequiredProcessors = maxRequiredProcessors(tasksWithMaxPriority);
         List<ScheduleTask> tasksWithMaxRequiredProcessors = findAllTasksWithGivenRequiredProcessors(tasksWithMaxPriority, maxRequiredProcessors);
 
         int maxNumberOfDependencies = maxNumberOfDependencies(tasksWithMaxRequiredProcessors);

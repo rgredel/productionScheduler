@@ -13,8 +13,9 @@ import pl.edu.pk.wieik.productionScheduler.task.model.Task;
 public class TaskController {
     private final TaskService taskService;
 
-    @PostMapping("/users/auth/register")
-    public ResponseEntity<Task> register(@RequestBody CreateTaskDto createTaskDto){
+    @PostMapping("/task")
+    public ResponseEntity<Task> createTask(@RequestBody CreateTaskDto createTaskDto){
         return ResponseEntity.ok(taskService.createTask(createTaskDto));
     }
+
 }

@@ -1,13 +1,14 @@
 package pl.edu.pk.wieik.productionScheduler.productionProcess.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
 
 @Getter
 @Setter
 @SuperBuilder
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class ParameterDto extends AddParameterDto{
-    private Long id;
+public abstract class ParameterDto {
+    protected int value;
+    protected Type type;
 }

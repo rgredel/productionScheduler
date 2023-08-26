@@ -1,5 +1,6 @@
 package pl.edu.pk.wieik.productionScheduler.task.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
@@ -33,12 +34,12 @@ public class ProductionProcessTask {
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private Users user;
 
-    @ManyToOne
-    @ToString.Exclude
-    private ProductionProcessTask parent;
+    @ManyToMany(mappedBy="previousProductionProcessTasks")
+    @JsonIgnore
+    private List<ProductionProcessTask> nextProductionProcessTasks;
 
-    @OneToMany(mappedBy="parent")
-    private List<ProductionProcessTask> relatedProductionProcessTasks;
+    @ManyToMany
+    private List<ProductionProcessTask> previousProductionProcessTasks;
 
 }
 
