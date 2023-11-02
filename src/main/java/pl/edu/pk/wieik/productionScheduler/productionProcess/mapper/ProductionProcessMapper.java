@@ -5,17 +5,16 @@ import org.springframework.stereotype.Service;
 import pl.edu.pk.wieik.productionScheduler.parameter.ParameterService;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ProductionProcessDto;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ProductionProcessParameterDto;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ProductionProcessTaskDto;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.TaskParameterDto;
+import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.*;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.model.ProductionProcess;
 import pl.edu.pk.wieik.productionScheduler.schedule.dto.ScheduleTask;
 import pl.edu.pk.wieik.productionScheduler.task.dto.TaskDto;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
 import pl.edu.pk.wieik.productionScheduler.task.model.Task;
+import pl.edu.pk.wieik.productionScheduler.user.model.Users;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class ProductionProcessMapper {
         return ProductionProcessTaskDto.builder()
                 .id(task.getId())
                 .task(mapToTaskDto(task.getTask()))
-                .userId(task.getUser().getId())
+                .userId(Optional.ofNullable(task.getUser()).orElse(new Users()).getId())
                 .previousTaskIds(task.getPreviousProductionProcessTasks().stream().map(ProductionProcessTask::getId).collect(Collectors.toList()))
                 .parameters(mapToTaskParameterDtos(task.getParameters()))
                 .build();
@@ -45,14 +44,13 @@ public class ProductionProcessMapper {
                 .build();
     }
 
-    public List<TaskParameterDto> mapToTaskParameterDtos(List<Parameter> parameters){
+    public List<ParameterDto> mapToTaskParameterDtos(List<Parameter> parameters){
         return parameters.stream().map(this::mapToTaskParameterDto).collect(Collectors.toList());
     }
 
-    public TaskParameterDto mapToTaskParameterDto(Parameter parameter){
-        return TaskParameterDto.builder()
+    public ParameterDto mapToTaskParameterDto(Parameter parameter){
+        return ParameterDto.builder()
                 .id(parameter.getId())
-                .taskId(parameter.getProductionProcessTask().getId())
                 .value(parameter.getValue())
                 .type(parameter.getType())
                 .name(parameter.getName())
@@ -92,10 +90,11 @@ public class ProductionProcessMapper {
     }
 
     private ScheduleTask mapToScheduleTask(ProductionProcessTaskDto task){
-        List<TaskParameterDto> parameters = task.getParameters();
+        List<ParameterDto> parameters = task.getParameters();
 
         return ScheduleTask.builder()
                 .id(task.getId())
+                .name(task.getTask().getName())
                 .a(parameterService.getValueByType(parameters, Type.REQUIRED_PROCESSORS))
                 .p(parameterService.getValueByType(parameters, Type.TIME))
                 .d(parameterService.getValueByType(parameters, Type.LATEST_POSSIBLE_START_TIME))

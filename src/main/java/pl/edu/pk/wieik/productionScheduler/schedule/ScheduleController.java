@@ -13,7 +13,7 @@ import java.util.List;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/schedule/{id}")
     private List<ScheduledTasksForTimeUnit> scheduleProductionProcess(@PathVariable Long id){
         List<ScheduledTasksForTimeUnit> scheduledTasks = scheduleService.scheduleProductionProcess(id);
         System.out.println(scheduledTasks);

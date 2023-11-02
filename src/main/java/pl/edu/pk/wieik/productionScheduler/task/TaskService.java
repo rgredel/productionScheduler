@@ -32,4 +32,7 @@ public class TaskService {
         throw new NotFoundException(String.format("Task with id %s doesnt exist", taskId));
     }
 
+    public void updateTask(Task task) {
+        taskRepository.save(task);
+    }
 }

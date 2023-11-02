@@ -15,6 +15,7 @@ import pl.edu.pk.wieik.productionScheduler.productionProcess.model.ProductionPro
 import pl.edu.pk.wieik.productionScheduler.productionProcess.repository.ProductionProcessRepository;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.task.AddProductionProcessTaskDto;
 import pl.edu.pk.wieik.productionScheduler.task.TaskService;
+import pl.edu.pk.wieik.productionScheduler.task.dto.CreateTaskDto;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
 import pl.edu.pk.wieik.productionScheduler.task.model.Task;
 import pl.edu.pk.wieik.productionScheduler.task.repository.ProductionProcessTaskRepository;
@@ -42,7 +43,12 @@ public class ProductionProcessService {
 
     public ProductionProcessTaskDto addProductionProcessTask(Long id, AddProductionProcessTaskDto addProductionProcessTaskDto){
         ProductionProcess productionProcess = getProductionProcessById(id);
-        Task task = taskService.getTaskById(addProductionProcessTaskDto.getTaskId());
+
+        CreateTaskDto taskDto = CreateTaskDto.builder()
+                .name(addProductionProcessTaskDto.getName())
+                .description(addProductionProcessTaskDto.getDescription())
+                .build();
+        Task task = taskService.createTask(taskDto);
 
         List<Long> previousTaskIds = addProductionProcessTaskDto.getPreviousTaskIds();
         List<ProductionProcessTask> previousTasks = new ArrayList<>();
@@ -50,20 +56,51 @@ public class ProductionProcessService {
             previousTasks = productionProcessTaskRepository.findAllById(previousTaskIds);
         }
 
-        Users user = usersService.getUserById(addProductionProcessTaskDto.getUserId());
+        //Users user = usersService.getUserById(addProductionProcessTaskDto.getUserId());
 
 
         ProductionProcessTask productionProcessTask = ProductionProcessTask.builder()
                 .productionProcess(productionProcess)
                 .task(task)
                 .previousProductionProcessTasks(previousTasks)
-                .user(user)
+                //.user(user)
                 .build();
 
         ProductionProcessTask savedProductionProcessTask = productionProcessTaskRepository.save(productionProcessTask);
         List<Parameter> parameters = parameterService.addAllTaskParametersToProductionProcessTask(addProductionProcessTaskDto.getParameters(), savedProductionProcessTask);
         savedProductionProcessTask.setParameters(parameters);
         return productionProcessMapper.mapToProductionProcessTaskDto(savedProductionProcessTask);
+    }
+
+    public ProductionProcessTaskDto updateProductionProcessTask(Long productionProcessId, Long taskId, AddProductionProcessTaskDto addProductionProcessTaskDto) {
+        ProductionProcess productionProcess = getProductionProcessById(productionProcessId);
+        ProductionProcessTask productionProcessTaskToUpdate = getProductionProcessTaskById(taskId);
+        Task task = productionProcessTaskToUpdate.getTask();
+
+        task.setName(addProductionProcessTaskDto.getName());
+        task.setDescription(addProductionProcessTaskDto.getDescription());
+        productionProcessTaskToUpdate.setTask(task);
+
+        //taskService.updateTask(task);
+        List<Long> previousTaskIds = addProductionProcessTaskDto.getPreviousTaskIds();
+        List<ProductionProcessTask> previousTasks = new ArrayList<>();
+        if(!isEmpty(previousTaskIds)) {
+            previousTasks = productionProcessTaskRepository.findAllById(previousTaskIds);
+        }
+        productionProcessTaskToUpdate.setPreviousProductionProcessTasks(previousTasks);
+
+        //Users user = usersService.getUserById(addProductionProcessTaskDto.getUserId());
+
+        List<Parameter> parameters = addProductionProcessTaskDto.getParameters()
+                .stream()
+                .map(parameterDto -> parameterService.mapToParameter(parameterDto, productionProcessTaskToUpdate)).toList();
+        productionProcessTaskToUpdate.setParameters(parameters);
+
+
+        productionProcessTaskToUpdate.setProductionProcess(productionProcess);
+        ProductionProcessTask savedProductionProcessTask = productionProcessTaskRepository.save(productionProcessTaskToUpdate);
+        return productionProcessMapper.mapToProductionProcessTaskDto(savedProductionProcessTask);
+
     }
 
     public List<ProductionProcessTaskDto> getAllProductionProcessTasks(Long id){
