@@ -28,9 +28,19 @@ public class ProductionProcessController {
         return ResponseEntity.ok(productionProcessService.addProductionProcessTask(id, addProductionProcessTaskDto));
     }
 
+    @PutMapping("/productionProcess/{productionProcessId}/task/{taskId}")
+    public ResponseEntity<ProductionProcessTaskDto> updateTask(@PathVariable Long productionProcessId, @PathVariable Long taskId, @RequestBody AddProductionProcessTaskDto addProductionProcessTaskDto){
+        return ResponseEntity.ok(productionProcessService.updateProductionProcessTask(productionProcessId, taskId, addProductionProcessTaskDto));
+    }
+
     @GetMapping("/productionProcess/{id}/tasks")
     public ResponseEntity<List<ProductionProcessTaskDto>> getAllProductionProcessTasks(@PathVariable Long id){
         return ResponseEntity.ok(productionProcessService.getAllProductionProcessTasks(id));
+    }
+
+    @GetMapping("/productionProcess/{id}")
+    public ResponseEntity<ProductionProcessDto> getProductionProcess(@PathVariable Long id){
+        return ResponseEntity.ok(productionProcessService.getProductionProcessDtoById(id));
     }
 
     @GetMapping("/productionProcess")

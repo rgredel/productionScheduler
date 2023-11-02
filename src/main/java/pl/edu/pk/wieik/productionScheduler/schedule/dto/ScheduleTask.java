@@ -12,6 +12,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class ScheduleTask {
    private Long id;
+   private String name;
    private int p; // qi - czas wykonania zadania
    private int q; // copy of p
    private int t; // czas wykonania zadania krytycznego

@@ -126,7 +126,11 @@ public class Scheduler {
     }
 
     private void validatePossibilityToSchedule(ScheduleTask task) {
-        int latestTaskCompletionDate = task.getD() + task.getP();
+        Integer latestPossibleStartTime = task.getD();
+        if(latestPossibleStartTime == null || latestPossibleStartTime == 0){
+            return;
+        }
+        int latestTaskCompletionDate = latestPossibleStartTime + task.getP();
         if(task.getT() > latestTaskCompletionDate){
             throw new ImpossibleToScheduleException("Latest task completion date is before critical task date" +  task);
         }

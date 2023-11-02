@@ -1,0 +1,31 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  /* The navbar links */
+  .navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar li {
+    margin: 0 10px;
+  }
+  
+  /* The active link */
+  .navbar a.active-link {
+    color: #ff0;
+    font-weight: bold;
+  }
+  
+  /* The hover effect */
+  .navbar a:hover {
+    color: #ff0;
+  }

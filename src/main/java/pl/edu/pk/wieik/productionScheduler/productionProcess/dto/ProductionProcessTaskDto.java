@@ -13,7 +13,7 @@ import java.util.List;
 public class ProductionProcessTaskDto {
     private Long id;
     private TaskDto task;
-    private List<TaskParameterDto> parameters;
+    private List<ParameterDto> parameters;
     private List<Long> previousTaskIds;
     private Long userId;
 }

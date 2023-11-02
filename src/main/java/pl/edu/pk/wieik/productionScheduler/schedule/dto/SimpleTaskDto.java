@@ -11,5 +11,6 @@ import lombok.ToString;
 @ToString
 public class SimpleTaskDto {
     private Long taskId;
+    private String name;
     private int processor;
 }

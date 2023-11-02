@@ -7,7 +7,6 @@ import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
 import pl.edu.pk.wieik.productionScheduler.parameter.repository.ParameterRepository;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.AddProductionProcessParameterDto;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.AddTaskParameterDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ParameterDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.model.ProductionProcess;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
@@ -28,18 +27,24 @@ public class ParameterService {
         return parameter.map(ParameterDto::getValue).orElse(0);
     }
 
-    public Parameter addTaskParameterToProductionProcessTask(AddTaskParameterDto addParameterDto, ProductionProcessTask productionProcessTask){
-        Parameter parameter = Parameter.builder()
-                .productionProcessTask(productionProcessTask)
-                .name(addParameterDto.getName())
-                .value(addParameterDto.getValue())
-                .type(addParameterDto.getType())
-                .build();
+    public Parameter addTaskParameterToProductionProcessTask(ParameterDto parameterDto, ProductionProcessTask productionProcessTask){
+        Parameter parameter = mapToParameter(parameterDto, productionProcessTask);
 
         return parameterRepository.save(parameter);
     }
 
-    public List<Parameter> addAllTaskParametersToProductionProcessTask(List<AddTaskParameterDto> addParameterDtos, ProductionProcessTask productionProcessTask){
+    public Parameter mapToParameter(ParameterDto parameterDto, ProductionProcessTask productionProcessTask) {
+        Parameter parameter = Parameter.builder()
+                .id(parameterDto.getId())
+                .productionProcessTask(productionProcessTask)
+                .name(parameterDto.getName())
+                .value(parameterDto.getValue())
+                .type(parameterDto.getType())
+                .build();
+        return parameter;
+    }
+
+    public List<Parameter> addAllTaskParametersToProductionProcessTask(List<ParameterDto> addParameterDtos, ProductionProcessTask productionProcessTask){
        return addParameterDtos.stream()
                .map(dto -> addTaskParameterToProductionProcessTask(dto, productionProcessTask))
                .filter(Objects::nonNull)

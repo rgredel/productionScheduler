@@ -16,7 +16,11 @@ public class ScheduledTaskMapper {
         tasks.stream().map(ScheduledTask::getTimeUnit).distinct().forEach(
                 timeUnit -> {
                     List<SimpleTaskDto> processorTaskId = Scheduler.getScheduledTaskForTimeUnit(tasks, timeUnit).stream()
-                                    .map(scheduledTask -> SimpleTaskDto.builder().taskId(scheduledTask.getTask().getId()).processor(scheduledTask.getProcessor()).build()).collect(Collectors.toList());
+                                    .map(scheduledTask -> SimpleTaskDto.builder()
+                                            .taskId(scheduledTask.getTask().getId())
+                                            .name(scheduledTask.getTask().getName())
+                                            .processor(scheduledTask.getProcessor())
+                                            .build()).collect(Collectors.toList());
                     result.add(ScheduledTasksForTimeUnit.builder()
                             .timeUnit(timeUnit)
                             .processorTaskId(processorTaskId)
