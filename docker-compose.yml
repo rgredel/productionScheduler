@@ -10,9 +10,11 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: productionscheduler
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
     ports:
-      - "5430:5432"
+      - "5432:5432"
 
   # pgAdmin 4
   pgadmin:
@@ -37,13 +39,3 @@ services:
       - "8080:8080"
     depends_on:
       - db
-
-  # React Application
-  react-app:
-    container_name: react_app_container
-    build:
-      dockerfile: frontend/Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - spring-app

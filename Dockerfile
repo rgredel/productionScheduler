@@ -2,7 +2,7 @@ FROM amazoncorretto:17-alpine-jdk as builder
 
 ADD . /app/
 WORKDIR /app
-RUN chmod 777 gradlew
+RUN chmod +x gradlew
 
 RUN ./gradlew clean build
 

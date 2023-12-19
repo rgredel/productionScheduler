@@ -1,8 +1,6 @@
 FROM node:14
-WORKDIR /app
-RUN apt-get update && apt-get install -y git
-
-RUN git clone https://github.com/rgredel/productionScheduler.git .
+ADD . /app-front
+WORKDIR /app-front
 
 RUN cd frontend
 RUN npm install
