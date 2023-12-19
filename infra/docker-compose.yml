@@ -31,7 +31,7 @@ services:
     container_name: spring_app_container
     build:
       context: .
-      dockerfile: spring-app-dockerfile
+      dockerfile: spring-app
     ports:
       - "8080:8080"
     depends_on:
@@ -42,7 +42,7 @@ services:
     container_name: react_app_container
     build:
       context: .
-      dockerfile: Dockerfile-react
+      dockerfile: react-app
     ports:
       - "3000:3000"
     depends_on:

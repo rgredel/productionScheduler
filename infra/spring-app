@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk17:alpine
+FROM amazoncorretto:17-alpine-jdk
 
 WORKDIR /app
 
@@ -6,6 +6,7 @@ RUN apk --no-cache add git
 
 RUN git clone https://github.com/rgredel/productionScheduler.git .
 
+RUN chmod +x ./gradlew
 RUN ./gradlew build
 EXPOSE 8080
 
