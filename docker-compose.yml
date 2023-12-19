@@ -6,6 +6,7 @@ services:
     container_name: pg_container
     image: postgres
     restart: always
+    platform: linux/arm64  # Specify the platform
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -18,6 +19,7 @@ services:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
     restart: always
+    platform: linux/arm64  # Specify the platform
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -30,8 +32,7 @@ services:
   spring-app:
     container_name: spring_app_container
     build:
-      context: .
-      dockerfile: spring-app
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -41,8 +42,7 @@ services:
   react-app:
     container_name: react_app_container
     build:
-      context: .
-      dockerfile: react-app
+      dockerfile: frontend/Dockerfile
     ports:
       - "3000:3000"
     depends_on:
