@@ -1,27 +1,21 @@
 version: '3.8'
 
 services:
-  # PostgreSQL
   db:
     container_name: pg_container
     image: postgres
     restart: always
-    platform: linux/arm64  # Specify the platform
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: productionscheduler
-    volumes:
-      - ./init-scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
 
-  # pgAdmin 4
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
     restart: always
-    platform: linux/arm64  # Specify the platform
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -30,7 +24,6 @@ services:
     depends_on:
       - db
 
-  # Spring Boot Application
   spring-app:
     container_name: spring_app_container
     build:
@@ -39,3 +32,11 @@ services:
       - "8080:8080"
     depends_on:
       - db
+
+  react-app:
+    container_name: react_app_container
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
