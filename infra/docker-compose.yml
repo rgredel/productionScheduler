@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # PostgreSQL
+  db:
+    container_name: pg_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5430:5432"
+
+  # pgAdmin 4
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  # Spring Boot Application
+  spring-app:
+    container_name: spring_app_container
+    build:
+      context: .
+      dockerfile: spring-app-dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  # React Application
+  react-app:
+    container_name: react_app_container
+    build:
+      context: .
+      dockerfile: Dockerfile-react
+    ports:
+      - "3000:3000"
+    depends_on:
+      - spring-app

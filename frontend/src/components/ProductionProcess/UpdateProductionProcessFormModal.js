@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Typography, Box } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 
-const AddProductionProcessTaskFormModal = ({ closeModal }) => {
-  const [productionProcessName, setProductionProcessName] = useState('');
+const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => {
+  const [productionProcessName, setProductionProcessName] = useState(productionProcess.name);
   const [availableProcessors, setAvailableProcessors] = useState(1);
+
+  const currentAvailableProcessors = () => {
+    const tasksWithAvailableProcessorsParam = productionProcess.parameters.find(element => element.type === "AVAILABLE_PROCESSORS")
+    return tasksWithAvailableProcessorsParam == null ? 0 : tasksWithAvailableProcessorsParam.value
+  };
+
+  useEffect(() => {
+    setAvailableProcessors(currentAvailableProcessors())
+    }, []);
 
   const [error, setError] = useState('');
 
@@ -14,17 +23,17 @@ const AddProductionProcessTaskFormModal = ({ closeModal }) => {
       availableProcessors: availableProcessors
     };
     try {
-      const response = await fetch("/productionProcess", {
+      const response = await fetch(`/productionProcess/${productionProcess.id}`, {
         headers: {
           "Content-Type": "application/json",
         },
-        method: "post",
+        method: "put",
         body: JSON.stringify(reqBody),
       })
 
       if (response.status === 200) {
         const data = await response.json();
-        alert('Dodano pomyślnie!');
+        alert('Edytowano pomyślnie!');
       } else if (response.status === 409) {
         const data = await response.json();
         setError("Błąd autoryzacji, zaloguj się ponownie!");
@@ -36,6 +45,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal }) => {
       console.log(error);
       setError('An error occurred, please try again later.')
     }
+    window.location.reload();
     closeModal();
   }
 
@@ -54,13 +64,23 @@ const AddProductionProcessTaskFormModal = ({ closeModal }) => {
   return (
     <Box sx={style}>
       <Typography variant="h4" gutterBottom align="center">
-        Nowy proces produkcyjny
+        Edytuj proces produkcyjny
       </Typography>
 
       <form onSubmit={handleSubmit}>
+      <TextField
+          id="outlined-basic"
+          label="Id"
+          defaultValue={productionProcess.id}
+          variant="outlined"
+          fullWidth
+          disabled
+          margin="normal"
+        />
         <TextField
           id="outlined-basic"
           label="Nazwa"
+          defaultValue={productionProcessName}
           variant="outlined"
           fullWidth
           margin="normal"
@@ -72,6 +92,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal }) => {
           id="outlined-basic"
           label="Dostępne maszyny"
           type="number"
+          defaultValue={availableProcessors}
           variant="outlined"
           fullWidth
           margin="normal"
@@ -92,14 +113,14 @@ const AddProductionProcessTaskFormModal = ({ closeModal }) => {
           variant="contained"
           fullWidth
           size="large"
-          color="addButton" 
-          startIcon={<AddIcon />}
+          color="editButton"
+           startIcon={<EditIcon />}
         >
-          Dodaj
+          Edytuj
         </Button>
       </form>
     </Box>
   );
 };
 
-export default AddProductionProcessTaskFormModal;
+export default UpdateProductionProcessTaskFormModal;

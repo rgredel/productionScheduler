@@ -28,6 +28,7 @@ public class ProductionProcessMapper {
                 .task(mapToTaskDto(task.getTask()))
                 .userId(Optional.ofNullable(task.getUser()).orElse(new Users()).getId())
                 .previousTaskIds(task.getPreviousProductionProcessTasks().stream().map(ProductionProcessTask::getId).collect(Collectors.toList()))
+                .nextTaskIds(task.getNextProductionProcessTasks().stream().map(ProductionProcessTask::getId).collect(Collectors.toList()))
                 .parameters(mapToTaskParameterDtos(task.getParameters()))
                 .build();
     }

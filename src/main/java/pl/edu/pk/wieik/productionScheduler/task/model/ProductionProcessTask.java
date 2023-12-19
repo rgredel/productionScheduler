@@ -8,6 +8,7 @@ import pl.edu.pk.wieik.productionScheduler.productionProcess.model.ProductionPro
 import pl.edu.pk.wieik.productionScheduler.user.model.Users;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "productionProcessTask")
@@ -21,7 +22,7 @@ public class ProductionProcessTask {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @OneToMany(mappedBy = "productionProcessTask")
+    @OneToMany(mappedBy = "productionProcessTask", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Parameter> parameters;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,5 +42,17 @@ public class ProductionProcessTask {
     @ManyToMany
     private List<ProductionProcessTask> previousProductionProcessTasks;
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        ProductionProcessTask that = (ProductionProcessTask) object;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalState } from '../../util/useLocalStorage';
-import ProductionProcessTaskList from './ProductionProcessTaskList';
+import ProductionProcessTaskList from './task/ProductionProcessTaskList';
 import { useParams } from "react-router-dom";
 
 const ProductionProcessDetail = () => {
@@ -28,8 +28,7 @@ const ProductionProcessDetail = () => {
 
       getData();
     },[])
-    console.log(productionProcess)
-
+    
     return (isLoading ? (<div>Loading...</div>) : <ProductionProcessTaskList productionProcess={productionProcess} />);
 };
 

@@ -27,9 +27,9 @@ const ProductionProcesses = () => {
 
       getData();
     },[])
-    console.log(productionProcesses)
-
-    return (isLoading ? (<div>Loading...</div>) : <ProductionProcessList productionProcesses={productionProcesses} />);
+    return (isLoading ? (<div>Loading...</div>) : 
+    <ProductionProcessList productionProcesses={productionProcesses} />
+    );
 };
 
 export default ProductionProcesses;

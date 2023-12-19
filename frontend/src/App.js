@@ -6,14 +6,12 @@ import { useLocalState } from './util/useLocalStorage';
 import ProductionProcesses from './components/ProductionProcess';
 import ProductionProcessDetail from './components/ProductionProcess/ProductionProcessDetail.js';
 
-import Homepage from './components/Homepage';
 import Login from './components/Login';
 import PrivateRoute from './components/PrivateRoute';
 import Register from './components/Register';
 import Reservation from './components/Reservation/Reservation';
 import Logout from './components/Login/Logout';
 import GanttChar from './components/GanttChar';
-
 
 function App() {  
 

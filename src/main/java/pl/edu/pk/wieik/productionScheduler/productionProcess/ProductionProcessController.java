@@ -23,6 +23,16 @@ public class ProductionProcessController {
         return ResponseEntity.ok(productionProcessService.createProductionProcess(createProductionProcessDto));
     }
 
+    @GetMapping("/productionProcess/{id}")
+    public ResponseEntity<ProductionProcessDto> getProductionProcess(@PathVariable Long id){
+        return ResponseEntity.ok(productionProcessService.getProductionProcessDtoById(id));
+    }
+
+    @PutMapping("/productionProcess/{id}")
+    public ResponseEntity<ProductionProcess> updatedProductionProcess(@PathVariable Long id, @RequestBody CreateProductionProcessDto createProductionProcessDto){
+        return ResponseEntity.ok(productionProcessService.updateProductionProcess(id, createProductionProcessDto));
+    }
+
     @PostMapping("/productionProcess/{id}/task")
     public ResponseEntity<ProductionProcessTaskDto> addTask(@PathVariable Long id, @RequestBody AddProductionProcessTaskDto addProductionProcessTaskDto){
         return ResponseEntity.ok(productionProcessService.addProductionProcessTask(id, addProductionProcessTaskDto));
@@ -36,11 +46,6 @@ public class ProductionProcessController {
     @GetMapping("/productionProcess/{id}/tasks")
     public ResponseEntity<List<ProductionProcessTaskDto>> getAllProductionProcessTasks(@PathVariable Long id){
         return ResponseEntity.ok(productionProcessService.getAllProductionProcessTasks(id));
-    }
-
-    @GetMapping("/productionProcess/{id}")
-    public ResponseEntity<ProductionProcessDto> getProductionProcess(@PathVariable Long id){
-        return ResponseEntity.ok(productionProcessService.getProductionProcessDtoById(id));
     }
 
     @GetMapping("/productionProcess")
@@ -62,6 +67,11 @@ public class ProductionProcessController {
     @DeleteMapping("/productionProcess/parameter/{id}")
     public ResponseEntity<Void> deleteProductionProcessParameter(@PathVariable Long id){
         return ResponseEntity.ok(productionProcessService.removeParameterFromProductionProcess(id));
+    }
+
+    @DeleteMapping("/productionProcess/{id}")
+    public ResponseEntity<Void> deleteProductionProcess(@PathVariable Long id){
+        return ResponseEntity.ok(productionProcessService.removeProductionProcess(id));
     }
 
 }

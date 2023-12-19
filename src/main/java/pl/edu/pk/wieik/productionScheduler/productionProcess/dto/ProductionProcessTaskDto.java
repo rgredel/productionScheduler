@@ -15,5 +15,6 @@ public class ProductionProcessTaskDto {
     private TaskDto task;
     private List<ParameterDto> parameters;
     private List<Long> previousTaskIds;
+    private List<Long> nextTaskIds;
     private Long userId;
 }

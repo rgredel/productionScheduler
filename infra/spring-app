@@ -1,0 +1,12 @@
+FROM adoptopenjdk/openjdk17:alpine
+
+WORKDIR /app
+
+RUN apk --no-cache add git
+
+RUN git clone https://github.com/rgredel/productionScheduler.git .
+
+RUN ./gradlew build
+EXPOSE 8080
+
+CMD ["java", "-jar", "build/libs/your-spring-boot-app.jar"]

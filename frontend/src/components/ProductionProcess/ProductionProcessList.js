@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import ProductionProcessBox from './ProductionProcessBox';
 import AddProductionProcessFormModal from './AddProductionProcessFormModal';
-import Modal from 'react-modal';
+import{ Button, Modal } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
 
 import './seance.css';
+import Navbar from '../Navbar/Navbar';
 
 const ProductionProcessList = ({ productionProcesses }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,23 +20,22 @@ const ProductionProcessList = ({ productionProcesses }) => {
   };
 
   return (
-    <div className="seances-container">
-      {productionProcesses.map(productionProcess => (
-        <ProductionProcessBox key={productionProcess.id} productionProcess={productionProcess} />
-      ))}
-      
-      <div>
-      <button onClick={openModal}>Dodaj nowy proces produkcyjny</button>
-
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Example Modal"
-      >
-          <AddProductionProcessFormModal closeModal={closeModal} />
-      </Modal>
-    </div>
-    
+    <div className="root">
+        <Navbar />
+      <div className="seances-container">
+      <Button sx={{ width: '100%' }} size="large" variant="contained" color="addButton" startIcon={<AddIcon/>} onClick={openModal}>Dodaj proces produkcyjny</Button>
+        {productionProcesses.map(productionProcess => (
+          <ProductionProcessBox key={productionProcess.id} productionProcess={productionProcess} />
+        ))}
+          <div className='modal-box'>
+          <Modal
+            open={isModalOpen}
+            onClose={closeModal}
+          >
+              <AddProductionProcessFormModal closeModal={closeModal} />
+          </Modal>
+        </div>
+      </div>
     </div>
   );
 }
