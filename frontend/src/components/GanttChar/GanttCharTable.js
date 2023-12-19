@@ -10,7 +10,6 @@ const GanttChartTable = ({ data }) => {
     });
     const availableProcessors = Array.from(availableProcessorsSet);
   
-    // Create the table structure
     const table = [];
     availableProcessors.forEach(processor => {
       const row = [];

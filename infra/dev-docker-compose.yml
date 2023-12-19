@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "5430:5432"
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4

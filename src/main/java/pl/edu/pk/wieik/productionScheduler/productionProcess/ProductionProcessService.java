@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import pl.edu.pk.wieik.productionScheduler.exception.NotFoundException;
 import pl.edu.pk.wieik.productionScheduler.parameter.ParameterService;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
+import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
+import pl.edu.pk.wieik.productionScheduler.parameter.repository.ParameterRepository;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.AddProductionProcessParameterDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.CreateProductionProcessDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ProductionProcessDto;
@@ -23,9 +25,11 @@ import pl.edu.pk.wieik.productionScheduler.user.UsersService;
 import pl.edu.pk.wieik.productionScheduler.user.model.Users;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -40,6 +44,7 @@ public class ProductionProcessService {
     private final UsersService usersService;
     private final ParameterService parameterService;
     private final ProductionProcessMapper productionProcessMapper;
+    private final ParameterRepository parameterRepository;
 
     public ProductionProcessTaskDto addProductionProcessTask(Long id, AddProductionProcessTaskDto addProductionProcessTaskDto){
         ProductionProcess productionProcess = getProductionProcessById(id);
@@ -91,14 +96,15 @@ public class ProductionProcessService {
 
         //Users user = usersService.getUserById(addProductionProcessTaskDto.getUserId());
 
-        List<Parameter> parameters = addProductionProcessTaskDto.getParameters()
-                .stream()
-                .map(parameterDto -> parameterService.mapToParameter(parameterDto, productionProcessTaskToUpdate)).toList();
-        productionProcessTaskToUpdate.setParameters(parameters);
-
+        productionProcessTaskToUpdate.getParameters().clear();
 
         productionProcessTaskToUpdate.setProductionProcess(productionProcess);
         ProductionProcessTask savedProductionProcessTask = productionProcessTaskRepository.save(productionProcessTaskToUpdate);
+
+        var updateParameters = addProductionProcessTaskDto.getParameters();
+        List<Parameter> parameters = parameterService.addAllTaskParametersToProductionProcessTask(updateParameters, productionProcessTaskToUpdate);
+
+        savedProductionProcessTask.setParameters(parameters);
         return productionProcessMapper.mapToProductionProcessTaskDto(savedProductionProcessTask);
 
     }
@@ -113,8 +119,42 @@ public class ProductionProcessService {
                 .name(createProductionProcessDto.getName())
                 .build();
 
-        return productionProcessRepository.save(productionProcess);
+        ProductionProcess savedProdProcess = productionProcessRepository.save(productionProcess);
+        AddProductionProcessParameterDto availableProcessorsParam = availableProcessorsAddDto(createProductionProcessDto.getAvailableProcessors());
+        parameterService.addParameterToProductionProcess(availableProcessorsParam, savedProdProcess);
+        return savedProdProcess;
     }
+
+    public ProductionProcess updateProductionProcess(Long productionProcessId, CreateProductionProcessDto createProductionProcessDto){
+        ProductionProcess productionProcess = productionProcessRepository.findById(productionProcessId)
+                .orElseThrow(() -> new NotFoundException(String.format("Production process with id: %s doesn't exists", productionProcessId)));
+
+        AddProductionProcessParameterDto availableProcessorsParam = availableProcessorsAddDto(createProductionProcessDto.getAvailableProcessors());
+        productionProcess.setName(createProductionProcessDto.getName());
+
+        Optional<Parameter> availableProcessors = productionProcess.getParameters().stream().filter(p -> p.getType().equals(Type.AVAILABLE_PROCESSORS)).findFirst();
+
+        ProductionProcess savedProdProcess = productionProcessRepository.save(productionProcess);
+
+        if(availableProcessors.isPresent()){
+            Parameter parameter = availableProcessors.get();
+            parameter.setValue(createProductionProcessDto.getAvailableProcessors());
+            parameterRepository.save(parameter);
+        } else {
+            parameterService.addParameterToProductionProcess(availableProcessorsParam, savedProdProcess);
+        }
+
+        return savedProdProcess;
+    }
+
+    private static AddProductionProcessParameterDto availableProcessorsAddDto(Integer processors) {
+        return AddProductionProcessParameterDto.builder()
+                .name("Available processors")
+                .value(processors)
+                .type(Type.AVAILABLE_PROCESSORS)
+                .build();
+    }
+
 
     public Void removeParameterFromProductionProcess(Long parameterId){
         parameterService.removeParameterById(parameterId);
@@ -150,11 +190,20 @@ public class ProductionProcessService {
 
     public Void removeProductionProcessTask(Long id) {
         ProductionProcessTask productionProcessTask = getProductionProcessTaskById(id);
-        productionProcessTaskRepository.delete(productionProcessTask);
+        if(productionProcessTask != null) {
+            productionProcessTaskRepository.deletePreviousTasks(productionProcessTask.getId());
+            productionProcessTaskRepository.delete(productionProcessTask);
+        }
         return null;
     }
 
     public List<ProductionProcessDto> getAllProductionProcesses() {
         return productionProcessMapper.mapToProductionProcessDtos(productionProcessRepository.findAll());
+    }
+
+    public Void removeProductionProcess(Long id) {
+        ProductionProcess productionProcess = getProductionProcessById(id);
+        productionProcessRepository.delete(productionProcess);
+        return null;
     }
 }

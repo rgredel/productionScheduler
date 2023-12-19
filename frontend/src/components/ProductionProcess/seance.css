@@ -2,10 +2,9 @@
     display: flex;
     flex-direction: column; /* Wyświetlaj elementy w kolumnie */
     gap: 10px;
-    width: 90%;
-    padding: 10px;
-    margin: 10px;
-    background-color: #f5f5f5;
+    width: 100%;
+    margin-top: 15px;
+    background-color: #90cef8;
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     justify-content: space-between;
@@ -14,25 +13,23 @@
   .seances-container {
     display: flex;
     flex-wrap: wrap;
-    width: 70%;
+    width: 75%;
     margin: 0 auto;
+    margin-top: 15px;
   }
 
   .seance-box p {
     margin: 0;
   }
-  
-  .seance-box button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: auto;
+  .seance-box a {
+    width: 40%;
   }
-  
-  .seance-box button:hover {
-    background-color: #3e8e41;
+
+html {
+    background-size: cover;
+    background-color: #cbe0fa;
+    min-height: 100%;
   }
+
+
 

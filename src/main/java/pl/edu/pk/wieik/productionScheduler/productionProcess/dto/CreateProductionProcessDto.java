@@ -7,4 +7,5 @@ import lombok.*;
 @RequiredArgsConstructor
 public class CreateProductionProcessDto {
     private String name;
+    private Integer availableProcessors;
 }

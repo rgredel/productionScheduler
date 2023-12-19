@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useLocalState } from '../../util/useLocalStorage';
-import Homepage from '../Homepage';
 import '../Login/LoginForm.css';
 
 const Register = () => {
