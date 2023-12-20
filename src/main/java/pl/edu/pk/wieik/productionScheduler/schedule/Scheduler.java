@@ -51,6 +51,9 @@ public class Scheduler {
             int timeUnits = 1;
             while (!isEmpty(readyTasks) && currentlyAvailableProcessors > 0) {
                 recalculateReadyTask(readyTasks, currentlyAvailableProcessors);
+                if(isEmpty(readyTasks)){
+                    break;
+                }
                 ScheduleTaskResult scheduleTaskResult = scheduleReadyTask(readyTasks, currentlyAvailableProcessors, availableProcessors, timeUnits, schedule, currentTimeUnit);
                 currentlyAvailableProcessors = scheduleTaskResult.getAvailableProcessors();
                 ScheduleTask processedTask = scheduleTaskResult.getProcessedTask();

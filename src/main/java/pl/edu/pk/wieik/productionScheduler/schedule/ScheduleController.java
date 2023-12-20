@@ -15,9 +15,7 @@ public class ScheduleController {
 
     @GetMapping("/schedule/{id}")
     private List<ScheduledTasksForTimeUnit> scheduleProductionProcess(@PathVariable Long id){
-        List<ScheduledTasksForTimeUnit> scheduledTasks = scheduleService.scheduleProductionProcess(id);
-        System.out.println(scheduledTasks);
-        return scheduledTasks;
+        return scheduleService.scheduleProductionProcess(id);
     }
 
 }
