@@ -14,6 +14,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Logo from './pk.webp';
+import { Settings } from '@mui/icons-material';
+import SettingsBox from './SettingsBox';
 
 const pages = [];
 const settings = ['Konto', 'Wyloguj'];
@@ -22,35 +24,21 @@ function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [anchorElNav, setAnchorElNav] = React.useState();
-    const [anchorElUser, setAnchorElUser] = React.useState();
 
     React.useEffect(() => {
         if(jwt) {
             setIsLoggedIn(true)
         }else{
-            setIsLoggedIn(false) 
+            setIsLoggedIn(false)
+  
         }},[jwt])
-
-    const handleLogout = () => {
-      alert("Wylogowano")
-            setJwt("");
-            setIsLoggedIn(false);
-          };
-
 
           const handleOpenNavMenu = (event) => {
             setAnchorElNav(event.currentTarget);
           };
-          const handleOpenUserMenu = (event) => {
-            setAnchorElUser(event.currentTarget);
-          };
         
           const handleCloseNavMenu = () => {
             setAnchorElNav(null);
-          };
-        
-          const handleCloseUserMenu = () => {
-            setAnchorElUser(null);
           };
 
           return (
@@ -113,11 +101,13 @@ function Navbar() {
                         display: { xs: 'block', md: 'none' },
                       }}
                     >
-                <NavLink to="/" activeClassName="active-link">
+                                        {isLoggedIn && 
+                <NavLink to="/productionProcess" activeClassName="active-link">
                         <MenuItem key="Procesy produkcyjne" containerElement={<React.Link to="/" />}>
                           <Typography textAlign="center">Procesy produkcyjne</Typography>
                         </MenuItem>
                 </NavLink>
+}
 
                     </Menu>
                   </Box>
@@ -149,52 +139,35 @@ function Navbar() {
                     WIEiK
                   </Typography>
                   <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+
+                  {isLoggedIn &&
                   <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                       <Button
                         key="Procesy produkcyjne"
-                        href="/"
+                        href="/productionProcess"
                         sx={{ my: 2, color: 'white', display: 'block' }}
                       >
                       Procesy produkcyjne
                       </Button>
                   </Box>
+                  }
+
                   </Box>
-        
-                  <Box sx={{ flexGrow: 0 }}>
-                    <Tooltip title="Open settings">
-                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                      </IconButton>
-                    </Tooltip>
-                    <Menu
-                      sx={{ mt: '45px' }}
-                      id="menu-appbar"
-                      anchorEl={anchorElUser}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      open={Boolean(anchorElUser)}
-                      onClose={handleCloseUserMenu}
-                    >
-                        <MenuItem key="Konto" onClick={handleCloseUserMenu}>
-                          <Typography textAlign="center">Konto</Typography>
-                        </MenuItem>
-                        <MenuItem key="Wyloguj" onClick={handleLogout}>
-                          <Typography textAlign="center">Wyloguj</Typography>
-                        </MenuItem>
-                    </Menu>
+                  
+                {isLoggedIn ? 
+                  (<SettingsBox />) 
+                  :
+                  (<Box>
+                  <Button color="inherit" onClick={() => window.location.href = "/login"}>Zaloguj</Button>
+                  <Button color="inherit" onClick={() => window.location.href = "/register"}>Zarejstruj</Button>
                   </Box>
+                  )
+                }
+                    
                 </Toolbar>
               </Container>
             </AppBar>
           );
-
   }
 
 export default Navbar;

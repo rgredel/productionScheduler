@@ -21,16 +21,15 @@ import pl.edu.pk.wieik.productionScheduler.task.dto.CreateTaskDto;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
 import pl.edu.pk.wieik.productionScheduler.task.model.Task;
 import pl.edu.pk.wieik.productionScheduler.task.repository.ProductionProcessTaskRepository;
-import pl.edu.pk.wieik.productionScheduler.user.UsersService;
-import pl.edu.pk.wieik.productionScheduler.user.model.Users;
+import pl.edu.pk.wieik.productionScheduler.user.UserService;
+import pl.edu.pk.wieik.productionScheduler.user.model.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 
@@ -41,7 +40,7 @@ public class ProductionProcessService {
     private final TaskService taskService;
     private final ProductionProcessTaskRepository productionProcessTaskRepository;
     private final ProductionProcessRepository productionProcessRepository;
-    private final UsersService usersService;
+    private final UserService userService;
     private final ParameterService parameterService;
     private final ProductionProcessMapper productionProcessMapper;
     private final ParameterRepository parameterRepository;
@@ -114,9 +113,14 @@ public class ProductionProcessService {
         return productionProcessMapper.mapToProductionProcessTaskDtos(productionProcess.getProductionProcessTasks());
     }
 
-    public ProductionProcess createProductionProcess(CreateProductionProcessDto createProductionProcessDto){
+    public ProductionProcess createProductionProcess(CreateProductionProcessDto createProductionProcessDto, User user){
+        if(isNull(user)){
+            throw new NotFoundException("User not found!");
+        }
+
         ProductionProcess productionProcess = ProductionProcess.builder()
                 .name(createProductionProcessDto.getName())
+                .user(user)
                 .build();
 
         ProductionProcess savedProdProcess = productionProcessRepository.save(productionProcess);
@@ -197,8 +201,8 @@ public class ProductionProcessService {
         return null;
     }
 
-    public List<ProductionProcessDto> getAllProductionProcesses() {
-        return productionProcessMapper.mapToProductionProcessDtos(productionProcessRepository.findAll());
+    public List<ProductionProcessDto> getAllUsersProductionProcesses(Long userId) {
+        return productionProcessMapper.mapToProductionProcessDtos(productionProcessRepository.findByUserId(userId));
     }
 
     public Void removeProductionProcess(Long id) {

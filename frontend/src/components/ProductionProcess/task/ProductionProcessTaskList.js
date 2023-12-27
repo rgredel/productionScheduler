@@ -3,6 +3,7 @@ import ProductionProcessTaskBox from './ProductionProcessTaskBox';
 import AddProductionProcessTaskFormModal from './AddProductionProcessTaskFormModal';
 import{ Button, Typography, Modal  } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 import Navbar from '../../Navbar/Navbar';
 import './../seance.css';
@@ -26,10 +27,10 @@ const ProductionProcessTaskList = ({ productionProcess }) => {
     <div className="seances-container">
 
       <Typography variant="h1"  sx={{flexGrow: "1"}}align='center'>
-        {productionProcess.name}<br/>
-        {productionProcess.id}
+        {productionProcess.name}
       </Typography>
 
+      <Button sx={{ width: '100%', marginBottom: '10px' }} size="large" variant="contained" onClick={() => window.location.href = '/schedule/' + productionProcess.id} color="silverButton" startIcon={<CalendarMonthIcon />}>Uszeregowanie</Button>
       <Button sx={{ width: '100%' }} size="large" variant="contained" color="addButton" startIcon={<AddIcon/>} onClick={openModal}>Dodaj nowe zadanie</Button>
 
       {tasks.map(task => (

@@ -4,6 +4,8 @@ import { Button, ButtonGroup, Modal, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import './../seance.css';
+import { useLocalState } from '../../../util/useLocalStorage';
+import Divider from '@mui/material/Divider';
 
 import UpdateProductionProcessTaskFormModal from './UpdateProductionProcessTaskFormModal';
 
@@ -11,6 +13,8 @@ import UpdateProductionProcessTaskFormModal from './UpdateProductionProcessTaskF
 
 const ProductionProcessTaskBox = ({ productionProcess, productionProcessTask }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [jwt, setJwt] = useLocalState("", "jwt");
+
   const [error, setError] = useState('');
 
   const openModal = () => {
@@ -26,6 +30,7 @@ const ProductionProcessTaskBox = ({ productionProcess, productionProcessTask }) 
       const response = await fetch(`/productionProcess/task/${productionProcessTask.id}`, {
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${jwt}`
         },
         method: "delete"
       })
@@ -40,7 +45,7 @@ const ProductionProcessTaskBox = ({ productionProcess, productionProcessTask }) 
 
     } catch (error) {
       console.log(error);
-      setError('An error occurred, please try again later.')
+      setError('Wystąpił błąd. Spróbuj ponownie później.')
     }
     window.location.reload();
   }
@@ -49,20 +54,29 @@ const ProductionProcessTaskBox = ({ productionProcess, productionProcessTask }) 
   return (
     <div className="seance-box">
       <Typography variant="h2" gutterBottom align='center'>
-          {productionProcessTask.task.name}<br/>
-          {productionProcessTask.id}
+          <i>{productionProcessTask.task.name}</i>
       </Typography>
 
-      <Typography sx={{ margin: '15px' }} variant="h4" gutterBottom>
-         Opis: <b><i>{productionProcessTask.task.description}</i></b>
+      <Divider>Id</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+      {productionProcessTask.id}
       </Typography>
-      <Typography sx={{ margin: '15px' }} variant="h4" gutterBottom>
-        Zadania poprzedzające: <b><i>{productionProcessTask.previousTaskIds.join(', ')}</i></b>
+
+      <Divider>Opis</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+            {productionProcessTask.task.description}
       </Typography>
   
-      <Typography sx={{ margin: '15px' }} variant="h4" gutterBottom>
-        Zadania kolejne: <b><i>{productionProcessTask.nextTaskIds.join(', ')}</i></b>
+      <Divider>Zadania poprzedzające</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+         {productionProcessTask.previousTaskIds.join(', ')}
       </Typography>
+
+      <Divider>Zadania następne</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+         {productionProcessTask.nextTaskIds.join(', ')}
+      </Typography>
+  
 
       <ButtonGroup size="large" variant="contained" aria-label="outlined primary button group">
         <Button sx={{ width: '50%' }} variant="contained" color="deleteButton" startIcon={<DeleteForeverIcon />} onClick={deleteTask}>Usuń</Button>

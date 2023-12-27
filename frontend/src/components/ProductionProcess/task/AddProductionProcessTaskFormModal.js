@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocalState } from '../../../util/useLocalStorage';
 import { Button, TextField, Typography, Box } from "@mui/material";
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
@@ -16,6 +17,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => 
   const [description, setDescription] = useState('');
   const [parameters, setParameters] = useState([]);
   const [maxRequiredProcessors, setMaxRequiredProcessors] = useState(0);
+  const [jwt, setJwt] = useLocalState("", "jwt");
 
     const style = {
     maxHeight: "calc(100vh - 200px)",
@@ -155,6 +157,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => 
         const response = await fetch(`/productionProcess/${productionProcess.id}/task` , {
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${jwt}`
             },
             method: "post",
             body: JSON.stringify(reqBody),
@@ -233,7 +236,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => 
               variant="outlined"
               sx={{width: '50%'}}
               margin="normal"
-              value={!param.name ? param.type : param.name}
+              value={param.name}
               onChange={event => handleParameterChange(index, "name", event.target.value)}
             />
             <TextField

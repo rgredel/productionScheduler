@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProductionProcessBox from './ProductionProcessBox';
 import AddProductionProcessFormModal from './AddProductionProcessFormModal';
-import{ Button, Modal } from "@mui/material";
+import { Button, Modal } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 
@@ -21,18 +21,18 @@ const ProductionProcessList = ({ productionProcesses }) => {
 
   return (
     <div className="root">
-        <Navbar />
+      <Navbar />
       <div className="seances-container">
-      <Button sx={{ width: '100%' }} size="large" variant="contained" color="addButton" startIcon={<AddIcon/>} onClick={openModal}>Dodaj proces produkcyjny</Button>
+        <Button sx={{ width: '100%' }} size="large" variant="contained" color="addButton" startIcon={<AddIcon />} onClick={openModal}>Dodaj proces produkcyjny</Button>
         {productionProcesses.map(productionProcess => (
           <ProductionProcessBox key={productionProcess.id} productionProcess={productionProcess} />
         ))}
-          <div className='modal-box'>
+        <div className='modal-box'>
           <Modal
             open={isModalOpen}
             onClose={closeModal}
           >
-              <AddProductionProcessFormModal closeModal={closeModal} />
+            <AddProductionProcessFormModal closeModal={closeModal} />
           </Modal>
         </div>
       </div>

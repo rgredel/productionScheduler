@@ -5,6 +5,7 @@ import lombok.*;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
 import pl.edu.pk.wieik.productionScheduler.schedule.model.Schedule;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
+import pl.edu.pk.wieik.productionScheduler.user.model.User;
 
 import java.util.List;
 
@@ -27,4 +28,8 @@ public class ProductionProcess {
     private List<ProductionProcessTask> productionProcessTasks;
     @OneToMany(mappedBy = "productionProcess", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
 }

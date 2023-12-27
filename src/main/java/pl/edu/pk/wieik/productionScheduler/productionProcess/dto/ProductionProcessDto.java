@@ -13,6 +13,7 @@ import java.util.List;
 public class ProductionProcessDto {
     private Long id;
     private String name;
+    private Long userId;
     private List<ProductionProcessParameterDto> parameters;
     private List<ProductionProcessTaskDto> tasks;
     private List<ScheduleDto> schedules;
