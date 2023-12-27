@@ -6,6 +6,9 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { Link, useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import { useLocalState } from '../../util/useLocalStorage';
+import Divider from '@mui/material/Divider';
+
 
 import UpdateProductionProcessFormModal from './UpdateProductionProcessFormModal';
 
@@ -14,6 +17,7 @@ import './seance.css';
 
 const ProductionProcessBox = ({ productionProcess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [jwt, setJwt] = useLocalState("", "jwt");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -44,6 +48,7 @@ const ProductionProcessBox = ({ productionProcess }) => {
       const response = await fetch(`/productionProcess/${productionProcess.id}`, {
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${jwt}`
         },
         method: "delete"
       })
@@ -64,20 +69,25 @@ const ProductionProcessBox = ({ productionProcess }) => {
   return (
     <div className="seance-box">
       <Typography variant="h2" gutterBottom align='center'>
-        {productionProcess.name}
+        <i>{productionProcess.name}</i>
       </Typography>
-
-      <Typography sx={{ margin: '15px' }} variant="h4" gutterBottom>
-        Maszyny: <b><i>{availableProcessors()}</i></b>
+      <Divider>Id</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+        {productionProcess.id}
       </Typography>
-      <Typography sx={{ margin: '15px' }} variant="h4" gutterBottom>
-        Zadania: <b><i>{tasks()}</i></b>
+      <Divider>Ilość maszyn</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+        {availableProcessors()}
+      </Typography>
+      <Divider>Ilość zadań</Divider>
+      <Typography align='center' sx={{ margin: '15px' }} variant="h5" gutterBottom>
+        {tasks()}
       </Typography>
       <ButtonGroup size="large" variant="contained" aria-label="outlined primary button group">
         <Button sx={{ width: '25%' }} variant="contained" color="deleteButton" startIcon={<DeleteForeverIcon />} onClick={deleteProductionProcess}>Usuń</Button>
         <Button sx={{ width: '25%' }} onClick={openModal} color="editButton" startIcon={<EditIcon />}>Edytuj</Button>
-        <Button sx={{ width: '25%' }} component={Link} to={'/productionProcess/' + productionProcess.id} color="manageButton" startIcon={<ListAltIcon />}>Zarządzaj zadaniami</Button>
-        <Button sx={{ width: '25%' }} component={Link} to={'/schedule/' + productionProcess.id} color="silverButton" startIcon={<CalendarMonthIcon />}>Uszereguj</Button>
+        <Button sx={{ width: '25%' }} onClick={() => window.location.href = '/productionProcess/' + productionProcess.id} color="manageButton" startIcon={<ListAltIcon />}>Zarządzaj zadaniami</Button>
+        <Button sx={{ width: '25%' }} onClick={() => window.location.href = '/schedule/' + productionProcess.id} color="silverButton" startIcon={<CalendarMonthIcon />}>Uszereguj</Button>
       </ ButtonGroup>
 
           <Modal

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Typography, Box } from "@mui/material";
 import Switch from '@mui/material/Switch';
-
+import { useLocalState } from '../../../util/useLocalStorage';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -18,6 +18,7 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess, p
   const [description, setDescription] = useState(productionProcessTask.task.description);
   const [parameters, setParameters] = useState(productionProcessTask.parameters);
   const [maxRequiredProcessors, setMaxRequiredProcessors] = useState(0);
+  const [jwt, setJwt] = useLocalState("", "jwt");
 
     const style = {
     maxHeight: "calc(100vh - 200px)",
@@ -167,6 +168,7 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess, p
           const response = await fetch(`/productionProcess/${productionProcess.id}/task/${productionProcessTask.id}` , {
               headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${jwt}`
               },
               method: "put",
               body: JSON.stringify(reqBody),
@@ -198,6 +200,7 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess, p
 
       <form onSubmit={handleSubmit}>
       <TextField
+          disabled
           id="outlined-basic"
           label="Id"
            defaultValue={productionProcessTask.id}
@@ -250,11 +253,11 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess, p
             <TextField
               id="outlined-basic"
               label="Nazwa"
-              defaultValue={!param.name ? param.type : param.name}
+              defaultValue={param.name}
               variant="outlined"
               sx={{width: '50%'}}
               margin="normal"
-              value={!param.name ? param.type : param.name}
+              value={param.name}
               onChange={event => handleParameterChange(index, "name", event.target.value)}
             />    
             <TextField

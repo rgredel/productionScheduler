@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useLocalState } from '../../util/useLocalStorage';
-import './LoginForm.css';
+import { Button, TextField, Typography, Box } from "@mui/material";
+import Navbar from '../Navbar/Navbar';
 
 const Login = () => {
     const [jwt, setJwt] = useLocalState("", "jwt")
@@ -9,22 +10,24 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const usernameRegexp = /^\w+$/;
-    const usernameMessage = 'Login can contain only letters, numbers or _ character';
-    const passwordRegexp = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
-    const passwordMessage = "Password must contain: a digit, a lower case letter, an uppercase letter, a special character," +
-                  " must be at least 8 characters long and cannot contain any spaces";
-    const mandatoryMessage = ' is mandatory!';
+    const usernameMessage = 'Login może zawierać tylko litery i cyfry';
+    const passwordRegexp = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const passwordMessage = "Hasło musi zawierać: cyfre, małą i dużą literę, znak specjalny," +
+    " minimum 8 znaków oraz nie może zawierać spacji";
+    const mandatoryMessage = ' jest obowiązkowe!';
   
     const handleSubmit = async (event) => {
       event.preventDefault();
       if(!username) {
-        setError('Username '+mandatoryMessage);
-      } else if(username.length < 3 || username.length > 32) {
-        setError('Username must be between 3 and 32 characters long');
+        setError('Pole nazwa użytkownika' + mandatoryMessage);
+      } else if (username.length < 3 || username.length > 32) {
+        setError('Nazwa użytkownika musi mieć długość między 3 a 32 znaki');
+      } else if (!usernameRegexp.test(username)) {
+        setError(usernameMessage);
       } else if (!usernameRegexp.test(username)) {
         setError(usernameMessage);
       } else if (!password) {
-        setError('Password '+mandatoryMessage);
+        setError('Pole hasło' + mandatoryMessage);
       } else if (!passwordRegexp.test(password)) {
         setError(passwordMessage);
       } else {
@@ -33,61 +36,83 @@ const Login = () => {
             password: password,
           }; 
         try {
-            const response = await fetch("/persons/auth/authenticate", {
+            const response = await fetch("/auth/login", {
                 headers: {
-                  "Content-Type": "application/json",
-                },
+                  "Content-Type": "application/json"},
                 method: "post",
                 body: JSON.stringify(reqBody),
               })
             
             if(response.status === 200) {
                 const data = await response.json();
-                alert('Logged in successful!');
                 setJwt(data.token);
               } else if(response.status === 403) {
-                setError('Invalid credentials!');
+                setError('Niepoprawny login lub hasło!');
               } else {
                 throw new Error();
               }
         } catch(error) {
             console.log(error);
-            setError('An error occurred, please try again later.')
-        }
+            setError('Wystąpił błąd. Spróbuj ponownie później.')
+          }
       }
     }
+
+    const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '30%',
+      bgcolor: '#cbe0fa',
+      border: '2px solid #00308F',
+      boxShadow: 24,
+      p: 4,
+    };
+
     if(jwt) return <Navigate to="/"/>  
     else
     return (<div>
-        <form className="login-form" onSubmit={handleSubmit}>
-          <label htmlFor="username" >Username:</label>
-            <input
-              className="login-input"
-              type="text"
-              name="username"
-              placeholder='Username'
-              value={username}
-              onChange={event => setUsername(event.target.value)}
-            />
-          
-          <br />
-          <label htmlFor="password">Password:</label>
-            <input
-              className="login-input"
-              name="password"
-              type="password"
-              placeholder='Password'
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
+        <Navbar />
+        <Box sx={style}>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            id="outlined-basic"
+            label="Nazwa użytkownika"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={username}
+            onChange={event => setUsername(event.target.value)}
+          />
+
+          <TextField
+            id="outlined-password-input"
+            type="password"
+            label="Hasło"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={password} s
+            onChange={event => setPassword(event.target.value)}
+          />
           
           <br />
           {error && <div className="login-error" style={{ color: 'red' }}>{error}</div>}
           <br />
-          <Link to="/register">Don't you have account yet? Click here to register.</Link>
-          <button className="login-button" type="submit">Log in</button>
+          <Link style={{ display: 'block', textAlign: 'center', marginTop: '20px' }}  to="/register">Nie masz jeszcze konta? Kliknij tutaj, aby się zarejestrować.</Link>
+          <br />
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            size="large"
+            color="editButton"
+          >
+            Zaloguj
+          </Button>
         </form>
-       
+       </Box>
         </div>
       );
 };

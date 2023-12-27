@@ -3,6 +3,7 @@ package pl.edu.pk.wieik.productionScheduler.productionProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pk.wieik.productionScheduler.common.BasicController;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.AddProductionProcessParameterDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.CreateProductionProcessDto;
@@ -15,12 +16,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class ProductionProcessController {
+public class ProductionProcessController extends BasicController {
     private final ProductionProcessService productionProcessService;
 
     @PostMapping("/productionProcess")
     public ResponseEntity<ProductionProcess> createProductionProcess(@RequestBody CreateProductionProcessDto createProductionProcessDto){
-        return ResponseEntity.ok(productionProcessService.createProductionProcess(createProductionProcessDto));
+        return handleRequest(() -> productionProcessService.createProductionProcess(createProductionProcessDto, user()));
     }
 
     @GetMapping("/productionProcess/{id}")
@@ -49,15 +50,14 @@ public class ProductionProcessController {
     }
 
     @GetMapping("/productionProcess")
-    public ResponseEntity<List<ProductionProcessDto>> getAllProductionProcessTasks(){
-        return ResponseEntity.ok(productionProcessService.getAllProductionProcesses());
+    public ResponseEntity<List<ProductionProcessDto>> getAllUsersProductionProcessTasks(){
+        return ResponseEntity.ok(productionProcessService.getAllUsersProductionProcesses(userId()));
     }
 
     @DeleteMapping("/productionProcess/task/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         return ResponseEntity.ok(productionProcessService.removeProductionProcessTask(id));
     }
-
 
     @PostMapping("/productionProcess/{id}/parameter")
     public ResponseEntity<Parameter> addProductionProcessParameter(@PathVariable Long id, @RequestBody AddProductionProcessParameterDto addProductionProcessParameterDto){

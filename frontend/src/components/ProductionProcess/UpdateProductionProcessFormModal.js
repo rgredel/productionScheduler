@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Typography, Box } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import { useLocalState } from '../../util/useLocalStorage';
 
 const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => {
   const [productionProcessName, setProductionProcessName] = useState(productionProcess.name);
   const [availableProcessors, setAvailableProcessors] = useState(1);
+  const [jwt, setJwt] = useLocalState("", "jwt");
 
   const currentAvailableProcessors = () => {
     const tasksWithAvailableProcessorsParam = productionProcess.parameters.find(element => element.type === "AVAILABLE_PROCESSORS")
@@ -26,6 +28,7 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess}) 
       const response = await fetch(`/productionProcess/${productionProcess.id}`, {
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${jwt}`
         },
         method: "put",
         body: JSON.stringify(reqBody),

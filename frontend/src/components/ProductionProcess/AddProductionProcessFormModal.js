@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Typography, Box } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import { useLocalState } from '../../util/useLocalStorage';
 
 const AddProductionProcessTaskFormModal = ({ closeModal }) => {
   const [productionProcessName, setProductionProcessName] = useState('');
   const [availableProcessors, setAvailableProcessors] = useState(1);
-
+  const [jwt, setJwt] = useLocalState("", "jwt");
   const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
@@ -17,6 +18,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal }) => {
       const response = await fetch("/productionProcess", {
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${jwt}`
         },
         method: "post",
         body: JSON.stringify(reqBody),

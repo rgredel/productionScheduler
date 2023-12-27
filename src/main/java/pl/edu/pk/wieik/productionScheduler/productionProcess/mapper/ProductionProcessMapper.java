@@ -11,7 +11,7 @@ import pl.edu.pk.wieik.productionScheduler.schedule.dto.ScheduleTask;
 import pl.edu.pk.wieik.productionScheduler.task.dto.TaskDto;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
 import pl.edu.pk.wieik.productionScheduler.task.model.Task;
-import pl.edu.pk.wieik.productionScheduler.user.model.Users;
+import pl.edu.pk.wieik.productionScheduler.user.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,6 @@ public class ProductionProcessMapper {
         return ProductionProcessTaskDto.builder()
                 .id(task.getId())
                 .task(mapToTaskDto(task.getTask()))
-                .userId(Optional.ofNullable(task.getUser()).orElse(new Users()).getId())
                 .previousTaskIds(task.getPreviousProductionProcessTasks().stream().map(ProductionProcessTask::getId).collect(Collectors.toList()))
                 .nextTaskIds(task.getNextProductionProcessTasks().stream().map(ProductionProcessTask::getId).collect(Collectors.toList()))
                 .parameters(mapToTaskParameterDtos(task.getParameters()))
@@ -79,6 +78,7 @@ public class ProductionProcessMapper {
         return ProductionProcessDto.builder()
                 .id(productionProcess.getId())
                 .name(productionProcess.getName())
+                .userId(Optional.ofNullable(productionProcess.getUser()).orElse(new User()).getId())
                 .parameters(mapToProductionProcessParameterDtos(productionProcess.getParameters()))
                 .tasks(mapToProductionProcessTaskDtos(productionProcess.getProductionProcessTasks()))
                 .build();
