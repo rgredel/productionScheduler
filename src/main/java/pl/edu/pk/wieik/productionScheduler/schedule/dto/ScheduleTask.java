@@ -13,6 +13,7 @@ import java.util.List;
 public class ScheduleTask {
    private Long id;
    private String name;
+   private String description;
    private int p; // qi - czas wykonania zadania
    private int q; // copy of p
    private int t; // czas wykonania zadania krytycznego

@@ -9,8 +9,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SimpleTaskDto {
-    private Long taskId;
+public class TaskOnTimeUnitDto {
+    private Long id;
     private String name;
-    private int processor;
+    private String description;
+    private int timeUnit;
 }

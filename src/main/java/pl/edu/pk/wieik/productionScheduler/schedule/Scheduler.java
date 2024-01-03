@@ -225,6 +225,13 @@ public class Scheduler {
                 .filter(scheduledTask -> scheduledTask.getTimeUnit() == timeUnit).
                 collect(Collectors.toList());
     }
+
+    public static List<ScheduledTask> getScheduledTaskForProcessor(List<ScheduledTask> schedule, int processor){
+        return schedule.stream()
+                .filter(scheduledTask -> scheduledTask.getProcessor() == processor).
+                collect(Collectors.toList());
+    }
+
     private void recalculateReadyTask(List<ScheduleTask> readyTasks, int currentlyAvailableProcessors) {
         readyTasks.removeIf(task -> task.getA() > currentlyAvailableProcessors);
     }

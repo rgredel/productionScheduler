@@ -96,6 +96,7 @@ public class ProductionProcessMapper {
         return ScheduleTask.builder()
                 .id(task.getId())
                 .name(task.getTask().getName())
+                .description(task.getTask().getDescription())
                 .a(parameterService.getValueByType(parameters, Type.REQUIRED_PROCESSORS))
                 .p(parameterService.getValueByType(parameters, Type.TIME))
                 .d(parameterService.getValueByType(parameters, Type.LATEST_POSSIBLE_START_TIME))

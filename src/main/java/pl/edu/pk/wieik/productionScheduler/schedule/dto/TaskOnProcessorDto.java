@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
 @Builder
 @Getter
 @Setter
 @ToString
-public class ScheduledTasksForTimeUnit {
-    private int timeUnit;
-    private List<TaskOnProcessorDto> processorTask;
+public class TaskOnProcessorDto {
+    private Long id;
+    private String name;
+    private String description;
+    private int processor;
 }
