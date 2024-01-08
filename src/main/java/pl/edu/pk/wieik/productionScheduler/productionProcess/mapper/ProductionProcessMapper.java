@@ -3,6 +3,8 @@ package pl.edu.pk.wieik.productionScheduler.productionProcess.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.wieik.productionScheduler.parameter.ParameterService;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.ParameterDto;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.ProductionProcessParameterDto;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.*;
@@ -99,7 +101,7 @@ public class ProductionProcessMapper {
                 .description(task.getTask().getDescription())
                 .a(parameterService.getValueByType(parameters, Type.REQUIRED_PROCESSORS))
                 .p(parameterService.getValueByType(parameters, Type.TIME))
-                .d(parameterService.getValueByType(parameters, Type.LATEST_POSSIBLE_START_TIME))
+                .d(parameterService.getValueByType(parameters, Type.LATEST_POSSIBLE_END_TIME))
                 .E(task.getPreviousTaskIds().stream().map(id -> ScheduleTask.builder().id(id).build()).collect(Collectors.toList()))
                 .build();
     }

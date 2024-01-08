@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
-import pl.edu.pk.wieik.productionScheduler.exception.ImpossibleToScheduleException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.ImpossibleToScheduleException;
 import pl.edu.pk.wieik.productionScheduler.schedule.dto.ScheduleTask;
 import pl.edu.pk.wieik.productionScheduler.schedule.dto.ScheduledTask;
 
@@ -20,23 +20,13 @@ public class Scheduler {
         List<ScheduleTask> scheduledTasks = new ArrayList<>();
         List<ScheduledTask> schedule = new LinkedList<>();
 
-        List<ScheduleTask> dependentTasks = new ArrayList<>();
         int currentTimeUnit = 0;
 
         for (ScheduleTask task : allTasks) {
-            calculatePriority(task);
-            calculateCriticalTaskTime(task, dependentTasks);
-            calculateNumberOfDependencies(task);
-        }
-
-        if(!isEmpty(dependentTasks)){
-            for (ScheduleTask task : allTasks) {
-                recalculatePriorityForDependentTasks(task);
-            }
-        }
-
-        for (ScheduleTask task : allTasks) {
+            calculateCriticalTaskTime(task);
             validatePossibilityToSchedule(task);
+            calculatePriority(task);
+            calculateNumberOfDependencies(task);
         }
 
         List<ScheduleTask> copyOfTasks = new ArrayList<>(allTasks);
@@ -103,12 +93,8 @@ public class Scheduler {
         task.setW(task.getA()*task.getP());
     }
 
-    private void calculateCriticalTaskTime(ScheduleTask task, List<ScheduleTask> dependentTasks) {
+    private void calculateCriticalTaskTime(ScheduleTask task) {
         List<ScheduleTask> previousTasks = task.getE();
-        if (!previousTasks.isEmpty()){
-            dependentTasks.add(task);
-        }
-
         Integer criticalTaskTime = previousTasks.stream().map(ScheduleTask::getP).reduce(0, Integer::sum);
         task.setT(criticalTaskTime);
     }
@@ -122,18 +108,9 @@ public class Scheduler {
         }
     }
 
-    private void recalculatePriorityForDependentTasks(ScheduleTask task) {
-        int currentPriority = task.getW();
-        int criticalTaskTime = task.getT();
-        task.setW(currentPriority + criticalTaskTime);
-    }
-
     private void validatePossibilityToSchedule(ScheduleTask task) {
-        Integer latestPossibleStartTime = task.getD();
-        if(latestPossibleStartTime == null || latestPossibleStartTime == 0){
-            return;
-        }
-        int latestTaskCompletionDate = latestPossibleStartTime + task.getP();
+        int latestTaskCompletionDate = Optional.ofNullable(task.getD()).orElse(Integer.MAX_VALUE);
+
         if(task.getT() > latestTaskCompletionDate){
             throw new ImpossibleToScheduleException("Latest task completion date is before critical task date" +  task);
         }

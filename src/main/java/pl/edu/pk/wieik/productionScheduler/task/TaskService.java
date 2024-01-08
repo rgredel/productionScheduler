@@ -3,7 +3,7 @@ package pl.edu.pk.wieik.productionScheduler.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pk.wieik.productionScheduler.exception.NotFoundException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.NotFoundException;
 import pl.edu.pk.wieik.productionScheduler.task.dto.CreateTaskDto;
 import pl.edu.pk.wieik.productionScheduler.task.model.Task;
 import pl.edu.pk.wieik.productionScheduler.task.repository.TaskRepository;

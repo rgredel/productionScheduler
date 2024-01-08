@@ -1,4 +1,4 @@
-package pl.edu.pk.wieik.productionScheduler.productionProcess.dto;
+package pl.edu.pk.wieik.productionScheduler.parameter.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

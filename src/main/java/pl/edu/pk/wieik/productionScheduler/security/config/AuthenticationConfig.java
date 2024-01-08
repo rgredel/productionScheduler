@@ -9,7 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.edu.pk.wieik.productionScheduler.exception.NotFoundException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.NotFoundException;
 import pl.edu.pk.wieik.productionScheduler.user.repository.UsersRepository;
 
 

@@ -4,7 +4,6 @@ const HomePage = () => {
     return (
         <div>
             <Navbar />
-            Tu będzie landing page
         </div>);
 }
 

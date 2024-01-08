@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.wieik.productionScheduler.common.BasicController;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.AddProductionProcessParameterDto;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.AddProductionProcessParameterDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.CreateProductionProcessDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ProductionProcessDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ProductionProcessTaskDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.model.ProductionProcess;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.task.AddProductionProcessTaskDto;
+import pl.edu.pk.wieik.productionScheduler.task.dto.AddProductionProcessTaskDto;
 
 import java.util.List;
 

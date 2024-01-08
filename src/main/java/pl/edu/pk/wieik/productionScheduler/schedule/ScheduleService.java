@@ -4,6 +4,7 @@ package pl.edu.pk.wieik.productionScheduler.schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.wieik.productionScheduler.parameter.ParameterService;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.ProductionProcessParameterDto;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.ProductionProcessService;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.*;

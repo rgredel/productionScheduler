@@ -126,7 +126,7 @@ const Register = () => {
             onChange={event => setRepeatPassword(event.target.value)}
           />
 
-          {error && <div className="login-error" style={{ color: 'red' }}>{error}</div>}
+          {error && <div className="login-error" style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
           
           <br />
           <Link to="/login" style={{ display: 'block', textAlign: 'center', marginTop: '20px' }}>Masz juź konto? Kliknij tutaj, aby się zalogowć.</Link>

@@ -42,7 +42,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => 
     const defaultParameters = [
       { name: "Czas zadania", value: 1, type: "TIME"},
       { name: "Wymagane maszyny", value: 1, type: "REQUIRED_PROCESSORS" },
-      { name: "Najpóźniejszy deadline rozpoczęcia zadania", value: 1000000000, type: "LATEST_POSSIBLE_START_TIME", isMax: true }
+      { name: "Najpóźniejszy deadline zadania", value: 1000000000, type: "LATEST_POSSIBLE_END_TIME", isMax: true }
       ];
 
     setParameters(defaultParameters);
@@ -114,7 +114,7 @@ const AddProductionProcessTaskFormModal = ({ closeModal, productionProcess}) => 
       if(updatedParameters[index].type === 'REQUIRED_PROCESSORS' ){
         updatedParameters[index].value = maxRequiredProcessors;
       }
-      if(updatedParameters[index].type === 'LATEST_POSSIBLE_START_TIME' ){
+      if(updatedParameters[index].type === 'LATEST_POSSIBLE_END_TIME' ){
         updatedParameters[index].value = 1000000000;
       }
       

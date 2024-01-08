@@ -2,12 +2,12 @@ package pl.edu.pk.wieik.productionScheduler.parameter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pk.wieik.productionScheduler.exception.NotFoundException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.NotFoundException;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Parameter;
 import pl.edu.pk.wieik.productionScheduler.parameter.model.Type;
 import pl.edu.pk.wieik.productionScheduler.parameter.repository.ParameterRepository;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.AddProductionProcessParameterDto;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ParameterDto;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.AddProductionProcessParameterDto;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.ParameterDto;
 import pl.edu.pk.wieik.productionScheduler.productionProcess.model.ProductionProcess;
 import pl.edu.pk.wieik.productionScheduler.task.model.ProductionProcessTask;
 

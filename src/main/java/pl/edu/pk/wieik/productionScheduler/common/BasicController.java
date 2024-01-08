@@ -4,9 +4,9 @@ package pl.edu.pk.wieik.productionScheduler.common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.edu.pk.wieik.productionScheduler.exception.AlreadyExistsException;
-import pl.edu.pk.wieik.productionScheduler.exception.InvalidRequestException;
-import pl.edu.pk.wieik.productionScheduler.exception.NotFoundException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.AlreadyExistsException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.InvalidRequestException;
+import pl.edu.pk.wieik.productionScheduler.common.exception.NotFoundException;
 import pl.edu.pk.wieik.productionScheduler.security.service.AuthService;
 import pl.edu.pk.wieik.productionScheduler.user.model.User;
 

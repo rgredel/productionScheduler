@@ -3,6 +3,7 @@ package pl.edu.pk.wieik.productionScheduler.productionProcess.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.ParameterDto;
 import pl.edu.pk.wieik.productionScheduler.task.dto.TaskDto;
 
 import java.util.List;

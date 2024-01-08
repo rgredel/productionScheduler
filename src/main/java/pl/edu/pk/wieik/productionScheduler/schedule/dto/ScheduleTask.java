@@ -17,8 +17,7 @@ public class ScheduleTask {
    private int p; // qi - czas wykonania zadania
    private int q; // copy of p
    private int t; // czas wykonania zadania krytycznego
-   private List<Integer> B; //spytać DD
-   private int d = 0; // najwcześnieszy możliwy temin rozpoczęcia zadania
+   private int d; // najpóźniejszy możliwy temin zakończenia zadania
    private int a; //liczba procesorów żadanych
    private int h; //liczba zadań w zbiorze E;
    private int w; // priorytet zadania w = a * p

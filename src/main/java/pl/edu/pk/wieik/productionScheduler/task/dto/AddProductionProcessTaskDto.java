@@ -1,8 +1,8 @@
-package pl.edu.pk.wieik.productionScheduler.productionProcess.task;
+package pl.edu.pk.wieik.productionScheduler.task.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import pl.edu.pk.wieik.productionScheduler.productionProcess.dto.ParameterDto;
+import pl.edu.pk.wieik.productionScheduler.parameter.dto.ParameterDto;
 
 import java.util.List;
 

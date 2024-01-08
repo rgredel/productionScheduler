@@ -37,7 +37,7 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess, p
   const parameterTypes = [
     "TIME",
     "REQUIRED_PROCESSORS",
-    "LATEST_POSSIBLE_START_TIME"
+    "LATEST_POSSIBLE_END_TIME"
     ];
   
   const availableProcessors = () => {
@@ -125,7 +125,7 @@ const UpdateProductionProcessTaskFormModal = ({ closeModal, productionProcess, p
       if(updatedParameters[index].type === 'REQUIRED_PROCESSORS' ){
         updatedParameters[index].value = maxRequiredProcessors;
       }
-      if(updatedParameters[index].type === 'LATEST_POSSIBLE_START_TIME' ){
+      if(updatedParameters[index].type === 'LATEST_POSSIBLE_END_TIME' ){
         updatedParameters[index].value = 1000000000;
       }
       
